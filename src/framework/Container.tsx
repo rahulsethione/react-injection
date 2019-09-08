@@ -1,15 +1,13 @@
-import React, { FunctionComponent, ComponentClass } from 'react';
-
-declare type ReactComponentType = string | FunctionComponent<{}> | ComponentClass<{}, any>;
-declare type Dependency = { [propName: string]: Function };
+import React from 'react';
+import { Dependency, ReactComponentType, ServiceType } from "./Types";
 
 export class Container {
-    private serviceMap: WeakMap<Function, any> = new Map();
-    private serviceIndexMap: WeakMap<Function, Array<Function>> = new Map();
+    private serviceMap: WeakMap<ServiceType, any> = new Map();
+    private serviceIndexMap: WeakMap<ServiceType, Array<ServiceType>> = new Map();
 
     public static readonly rootContainer: Container = new Container();
 
-    public resolve(serviceClass: Function): any {
+    public resolve(serviceClass: ServiceType): any {
         if (!this.serviceMap.has(serviceClass)) {
             this.register(serviceClass, ...this.serviceIndexMap.get(serviceClass));
         } else {
@@ -19,14 +17,14 @@ export class Container {
         return this.resolve(serviceClass);
     }
 
-    public register(serviceClass: Function, ...deps: Function[]) {
+    public register(serviceClass: ServiceType, ...deps: ServiceType[]) {
         this.serviceIndexMap.set(serviceClass, deps || []);
 
         const service = Reflect.construct(serviceClass, (deps || []).map(dep => this.resolve(dep)));
         this.serviceMap.set(serviceClass, service);
     }
 
-    public createComponent(Klass: ReactComponentType, deps: Dependency = {}): any {
+    public createComponent(Klass: ReactComponentType, deps: Dependency = {}): ReactComponentType {
         const services = {};
 
         Object.keys(deps).forEach(key => {
