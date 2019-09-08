@@ -12,7 +12,7 @@ export class Subject<T = any> implements EventEmitter<T> {
     private subscriptions: Map<(event: T) => void, Subscription> = new Map();
     
     dispatch(event: T) {
-        this.subscriptions.forEach((subscription, subscriber) => subscriber(event));
+        this.subscriptions.forEach((subscription: Subscription, subscriber: (event: T) => void) => subscriber(event));
     }
 
     subscribe(subscriber: (event: T) => void) {

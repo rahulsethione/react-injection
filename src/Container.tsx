@@ -2,14 +2,14 @@ import React from 'react';
 import { Dependency, ReactComponentType, ServiceType } from "./Types";
 
 export class Container {
-    private serviceMap: WeakMap<ServiceType, any> = new Map();
-    private serviceIndexMap: WeakMap<ServiceType, Array<ServiceType>> = new Map();
+    private serviceMap: Map<ServiceType, any> = new Map();
+    private serviceIndexMap: Map<ServiceType, Array<ServiceType>> = new Map();
 
     public static readonly rootContainer: Container = new Container();
 
     public resolve(serviceClass: ServiceType): any {
         if (!this.serviceMap.has(serviceClass)) {
-            this.register(serviceClass, ...this.serviceIndexMap.get(serviceClass));
+            this.register(serviceClass, ...(this.serviceIndexMap.get(serviceClass)|| []));
         } else {
             return this.serviceMap.get(serviceClass);
         }

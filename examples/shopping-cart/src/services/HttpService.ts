@@ -1,4 +1,4 @@
-import { Service } from "../framework/Annotations";
+import { Service } from 'react-inject';
 
 @Service()
 export class HttpService {

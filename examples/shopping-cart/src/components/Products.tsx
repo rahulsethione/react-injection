@@ -1,5 +1,5 @@
 import React from "react";
-import { Component} from '../framework/Annotations';
+import { Component } from 'react-inject';
 import { ShoppingService } from "../services/ShoppingService";
 import { Product } from "../entities/Product";
 import { ProductItem } from "./ProductItem";

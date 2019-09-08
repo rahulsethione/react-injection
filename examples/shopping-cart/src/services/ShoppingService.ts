@@ -2,8 +2,7 @@ import { HttpService } from "./HttpService";
 import { Product } from "../entities/Product";
 import { products } from "../data/products";
 import { CartItem } from "../entities/CartItem";
-import { Subject } from "../framework/EventEmitter";
-import { Service } from "../framework/Annotations";
+import { Service, Subject } from 'react-inject';
 
 @Service({
     dependencies: [HttpService]

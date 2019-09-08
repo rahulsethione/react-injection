@@ -1,5 +1,5 @@
 import React from "react";
-import { Component } from '../framework/Annotations';
+import { Component } from 'react-inject';
 import { ShoppingService } from "../services/ShoppingService";
 import { CartItem as ICartItem } from "../entities/CartItem";
 import { CartItem } from "./CartItem";
