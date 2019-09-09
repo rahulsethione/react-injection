@@ -10,13 +10,6 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -24,12 +17,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importDefault(require("react"));
 var Container = (function () {
     function Container() {
-        this.serviceMap = new Map();
-        this.serviceIndexMap = new Map();
+        this.serviceMap = new WeakMap();
+        this.serviceInjectionMap = new WeakMap();
     }
     Container.prototype.resolve = function (serviceClass) {
         if (!this.serviceMap.has(serviceClass)) {
-            this.register.apply(this, __spreadArrays([serviceClass], (this.serviceIndexMap.get(serviceClass) || [])));
+            this.register(serviceClass);
         }
         else {
             return this.serviceMap.get(serviceClass);
@@ -38,12 +31,16 @@ var Container = (function () {
     };
     Container.prototype.register = function (serviceClass) {
         var _this = this;
-        var deps = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            deps[_i - 1] = arguments[_i];
-        }
-        this.serviceIndexMap.set(serviceClass, deps || []);
-        var service = Reflect.construct(serviceClass, (deps || []).map(function (dep) { return _this.resolve(dep); }));
+        var injectablesMap = this.serviceInjectionMap.get(serviceClass);
+        var service = new serviceClass();
+        injectablesMap && injectablesMap.forEach(function (injectableService, property) {
+            Object.defineProperty(service, property, {
+                value: _this.resolve(injectableService),
+                enumerable: true,
+                configurable: true,
+                writable: false
+            });
+        });
         this.serviceMap.set(serviceClass, service);
     };
     Container.prototype.createComponent = function (Klass, deps) {
@@ -54,6 +51,13 @@ var Container = (function () {
             Object.defineProperty(services, key, { configurable: true, enumerable: true, writable: false, value: _this.resolve(deps[key]) });
         });
         return function (props) { return react_1.default.createElement(Klass, __assign({}, services, props)); };
+    };
+    Container.prototype.autowire = function (targetService, property, injectableService) {
+        if (!this.serviceInjectionMap.has(targetService)) {
+            this.serviceInjectionMap.set(targetService, new Map());
+        }
+        ;
+        this.serviceInjectionMap.get(targetService).set(property, injectableService);
     };
     Container.rootContainer = new Container();
     return Container;

@@ -2,17 +2,19 @@ import { HttpService } from "./HttpService";
 import { Product } from "../entities/Product";
 import { products } from "../data/products";
 import { CartItem } from "../entities/CartItem";
-import { Service, Subject } from 'react-inject';
+import { Service, Subject, Autowire } from 'react-inject';
 
-@Service({
-    dependencies: [HttpService]
-})
+@Service()
 export class ShoppingService {
+
+    @Autowire({ service: HttpService })
+    private readonly httpService: HttpService;
+
     private products: Product[] = [];
     private cartItemMap: Map<Product, number> = new Map();
     private shoppingSubject: Subject<CartItem> = new Subject();
 
-    constructor(private httpService: HttpService) {
+    constructor() {
         this.addToCart = this.addToCart.bind(this);
         this.removeFromCart = this.removeFromCart.bind(this);
     }
