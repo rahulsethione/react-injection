@@ -16,10 +16,10 @@ function Component(metadata) {
     };
 }
 exports.Component = Component;
-function Autowire(metadata) {
+function Autowired(metadata) {
     return function (target, propertyName, descriptor) {
         var _a = metadata.container, container = _a === void 0 ? Container_1.Container.rootContainer : _a, service = metadata.service;
         container.autowire(target.constructor, propertyName, service);
     };
 }
-exports.Autowire = Autowire;
+exports.Autowired = Autowired;

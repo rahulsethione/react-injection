@@ -11,7 +11,7 @@ export interface ComponentMetadata<T> {
     dependencies: TypedDependency<T>;
 }
 
-export interface AutowireMetadata {
+export interface AutowiredMetadata {
     container?: Container;
     service: ServiceType
 }
@@ -30,7 +30,7 @@ export function Component<T>(metadata: ComponentMetadata<T>) {
     }
 }
 
-export function Autowire(metadata: AutowireMetadata) {
+export function Autowired(metadata: AutowiredMetadata) {
     return function(target: any, propertyName: string, descriptor: TypedPropertyDescriptor<ServiceType>) {
         const { container = Container.rootContainer, service } = metadata;
         container.autowire(target.constructor as ServiceType, propertyName, service);

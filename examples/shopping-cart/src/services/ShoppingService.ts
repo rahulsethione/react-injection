@@ -2,12 +2,12 @@ import { HttpService } from "./HttpService";
 import { Product } from "../entities/Product";
 import { products } from "../data/products";
 import { CartItem } from "../entities/CartItem";
-import { Service, Subject, Autowire } from 'react-inject';
+import { Service, Subject, Autowired } from 'react-inject';
 
 @Service()
 export class ShoppingService {
 
-    @Autowire({ service: HttpService })
+    @Autowired({ service: HttpService })
     private readonly httpService: HttpService;
 
     private products: Product[] = [];
