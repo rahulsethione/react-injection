@@ -6,6 +6,6 @@ export declare class Container {
     static readonly rootContainer: Container;
     resolve(serviceClass: ServiceType): any;
     register(serviceClass: ServiceType): void;
-    createComponent(Klass: ReactComponentType, deps?: Dependency): ReactComponentType;
+    createComponent<T>(Klass: ReactComponentType<T>, deps?: Dependency): ReactComponentType<Partial<T>>;
     autowire(targetService: ServiceType, property: string, injectableService: ServiceType): void;
 }

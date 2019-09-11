@@ -24,7 +24,7 @@ export class Container {
 
         const service = new serviceClass();
 
-        injectablesMap.forEach((injectableService, property) => {
+        injectablesMap && injectablesMap.forEach((injectableService, property) => {
             Object.defineProperty(service, property, {
                 value: this.resolve(injectableService),
                 enumerable: true,
@@ -36,7 +36,7 @@ export class Container {
         this.serviceMap.set(serviceClass, service);
     }
 
-    public createComponent(Klass: ReactComponentType, deps: Dependency = {}): ReactComponentType {
+    public createComponent<T>(Klass: ReactComponentType<T>, deps: Dependency = {}): ReactComponentType<Partial<T>> {
         const services = {};
 
         Object.keys(deps).forEach(key => {

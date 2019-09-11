@@ -8,7 +8,7 @@ export interface ServiceMetadata {
 
 export interface ComponentMetadata<T> {
     container?: Container;
-    dependencies: TypedDependency<T>;
+    dependencies: TypedDependency<Partial<T>>;
 }
 
 export interface AutowiredMetadata {
@@ -24,7 +24,7 @@ export function Service(metadata: ServiceMetadata = {}) {
 }
 
 export function Component<T>(metadata: ComponentMetadata<T>) {
-    return function (component: ReactComponentType): any {
+    return function (component: ReactComponentType<T>): ReactComponentType<Partial<T>> {
         const { container = Container.rootContainer, dependencies } = metadata;
         return container.createComponent(component, dependencies);
     }

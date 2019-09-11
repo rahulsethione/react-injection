@@ -33,7 +33,7 @@ var Container = (function () {
         var _this = this;
         var injectablesMap = this.serviceInjectionMap.get(serviceClass);
         var service = new serviceClass();
-        injectablesMap.forEach(function (injectableService, property) {
+        injectablesMap && injectablesMap.forEach(function (injectableService, property) {
             Object.defineProperty(service, property, {
                 value: _this.resolve(injectableService),
                 enumerable: true,

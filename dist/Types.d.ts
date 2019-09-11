@@ -8,4 +8,4 @@ export declare type Dependency = {
 export declare type TypedDependency<T> = {
     [key in Extract<T, string>]: ServiceType;
 };
-export declare type ReactComponentType = React.FunctionComponent | React.ComponentClass;
+export declare type ReactComponentType<P = any> = React.FunctionComponent<P> | React.ComponentClass<P>;
